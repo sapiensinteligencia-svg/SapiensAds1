@@ -1,0 +1,100 @@
+const express = require('express')
+const router  = express.Router()
+const jwt     = require('jsonwebtoken')
+const User    = require('../models/User')
+const { sendMagicLinkEmail } = require('../services/emailService')
+
+router.post('/magic-link', async (req, res) => {
+  console.log('Magic link solicitado para:', req.body.email)
+  const { email } = req.body
+  if (!email)
+    return res.status(400).json({ error: 'El correo es requerido' })
+
+  try {
+    const user = await User.findOne({ email })
+    console.log('Usuario encontrado:', user ? 'sí' : 'no')
+
+    if (!user)
+      return res.status(404).json({ error: 'No encontramos una cuenta con ese correo. ¿Ya compraste tu plan?' })
+
+    if (!user.isActive)
+      return res.status(403).json({ error: 'Tu cuenta no está activa. Verifica tu compra en Hotmart.' })
+
+    console.log('Usuario activo:', user.isActive)
+
+    const token = user.generateMagicToken()
+    await user.save()
+
+    console.log('Token generado, enviando correo...')
+    await sendMagicLinkEmail({ name: user.name, email: user.email, token })
+    console.log('Correo enviado exitosamente')
+
+    res.json({ message: 'Enlace enviado. Revisa tu correo.' })
+  } catch (err) {
+    console.error('Error magic link:', err)
+    res.status(500).json({ error: 'Error al enviar el enlace' })
+  }
+})
+
+router.get('/verify', async (req, res) => {
+  const { token } = req.query
+  if (!token)
+    return res.status(400).json({ error: 'Token inválido' })
+
+  try {
+    const user = await User.findOne({
+      magicToken:        token,
+      magicTokenExpires: { $gt: new Date() }
+    })
+
+    if (!user)
+      return res.status(400).json({ error: 'El enlace expiró o es inválido. Solicita uno nuevo.' })
+
+    user.magicToken        = undefined
+    user.magicTokenExpires = undefined
+    await user.save()
+
+    const jwtToken = jwt.sign({ id: user._id }, process.env.JWT_SECRET, { expiresIn: '7d' })
+
+    res.redirect(`${process.env.APP_URL}/auth/callback?token=${jwtToken}`)
+  } catch (err) {
+    console.error('Error verificando token:', err)
+    res.status(500).json({ error: 'Error al verificar el enlace' })
+  }
+})
+
+router.post('/dev-login', async (req, res) => {
+  if (process.env.NODE_ENV === 'production')
+    return res.status(404).json({ error: 'Not found' })
+
+  const { email } = req.body
+  try {
+    const user = await User.findOne({ email })
+    if (!user) return res.status(404).json({ error: 'Usuario no encontrado' })
+
+    const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, { expiresIn: '7d' })
+    res.json({
+      token,
+      user: { id: user._id, name: user.name, email: user.email, plan: user.plan, credits: user.credits }
+    })
+  } catch (err) {
+    res.status(500).json({ error: 'Error' })
+  }
+})
+
+router.get('/me', require('../middleware/auth'), async (req, res) => {
+  try {
+    const user = req.user
+    res.json({
+      id:      user._id,
+      name:    user.name,
+      email:   user.email,
+      plan:    user.plan,
+      credits: user.credits,
+    })
+  } catch (err) {
+    res.status(500).json({ error: 'Error al obtener el perfil' })
+  }
+})
+
+module.exports = router
