@@ -156,7 +156,7 @@ const STRATEGY_COPY = {
   impact: (idea, format, langName) => `
 Eres experto en copywriting publicitario para Meta Ads en México.
 NEGOCIO: ${idea}
-Genera copy publicitario en ${langName} con ESTRATEGIA DE URGENCIA Y ESCASEZ.
+Genera copy publicitario en ${langName} con ESTRATEGIA DE VENTA AGRESIVA Y ALTA ENERGÍA.
 IMPORTANTE: NO uses palabras prohibidas: adelgaza, cura, trata, baja de peso,
 transforma tu cuerpo, gana dinero, ingreso pasivo, resultados garantizados de salud,
 suplemento, antes y después corporal. Solo vende el SERVICIO y la EXPERIENCIA.
@@ -172,7 +172,7 @@ Responde SOLO este JSON sin texto extra:
   solution: (idea, format, langName) => `
 Eres experto en copywriting publicitario para Meta Ads en México.
 NEGOCIO: ${idea}
-Genera copy publicitario en ${langName} con ESTRATEGIA PROFESIONAL Y CLARA.
+Genera copy publicitario en ${langName} con ESTRATEGIA NEUTRA, PROFESIONAL Y CLARA.
 IMPORTANTE: NO uses palabras prohibidas: adelgaza, cura, trata, baja de peso,
 transforma tu cuerpo, gana dinero, ingreso pasivo, resultados garantizados de salud,
 suplemento, antes y después corporal. Solo vende el SERVICIO y la EXPERIENCIA.
@@ -188,7 +188,7 @@ Responde SOLO este JSON sin texto extra:
   emotion: (idea, format, langName) => `
 Eres experto en copywriting publicitario para Meta Ads en México.
 NEGOCIO: ${idea}
-Genera copy publicitario en ${langName} con ESTRATEGIA DE ALTA ENERGÍA Y IMPACTO EMOCIONAL.
+Genera copy publicitario en ${langName} con ESTRATEGIA DE SENTIDO DE URGENCIA EXTREMA Y FOMO.
 IMPORTANTE: NO uses palabras prohibidas: adelgaza, cura, trata, baja de peso,
 transforma tu cuerpo, gana dinero, ingreso pasivo, resultados garantizados de salud,
 suplemento, antes y después corporal. Solo vende el SERVICIO y la EXPERIENCIA.

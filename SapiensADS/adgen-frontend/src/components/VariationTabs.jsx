@@ -1,8 +1,8 @@
 
 const VARIATION_LABELS = [
-  { id: 'impact',   label: 'Urgencia',  emoji: '⚡', color: 'red'   },
+  { id: 'impact',   label: 'Agresiva',  emoji: '💥', color: 'red'   },
   { id: 'solution', label: 'Neutro',    emoji: '🧠', color: 'blue'  },
-  { id: 'emotion',  label: 'Emocional', emoji: '❤️', color: 'amber' },
+  { id: 'emotion',  label: 'Urgencia',  emoji: '🚨', color: 'orange' },
 ]
 
 const FORMAT_LABELS = [
@@ -15,12 +15,14 @@ const colorMap = {
   red:   'border-red-500 bg-red-500/15 text-red-300',
   blue:  'border-blue-500 bg-blue-500/15 text-blue-300',
   amber: 'border-amber-500 bg-amber-500/15 text-amber-300',
+  orange: 'border-orange-500 bg-orange-500/15 text-orange-300',
 }
 
 const inactiveMap = {
   red:   'border-white/10 text-gray-500 hover:border-red-500/30 hover:text-red-400',
   blue:  'border-white/10 text-gray-500 hover:border-blue-500/30 hover:text-blue-400',
   amber: 'border-white/10 text-gray-500 hover:border-amber-500/30 hover:text-amber-400',
+  orange: 'border-white/10 text-gray-500 hover:border-orange-500/30 hover:text-orange-400',
 }
 
 export default function VariationTabs({ activeStrategy, activeFormat, onChangeStrategy, onChangeFormat }) {
