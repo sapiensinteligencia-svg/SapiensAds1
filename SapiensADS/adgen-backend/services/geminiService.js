@@ -1,4 +1,3 @@
-
 const { GoogleGenerativeAI } = require('@google/generative-ai')
 const { generateAdImage }    = require('./ideogramService')
 
@@ -12,147 +11,131 @@ const LANGUAGE_CONFIG = {
 
 const VISUAL_STYLE_CONFIG = {
   bold_product: {
-  name: 'Bold Product',
-  prompt: (idea, headline, subheadline, cta, format, langName) => `
-SUBJECT — THE ONLY PRODUCT OR SERVICE IN THIS IMAGE: ${idea}
-DO NOT generate cameras, generic products, skincare items, or any object unrelated to: ${idea}
+    name: 'Bold Product',
+    prompt: (idea, cta, format, langName) => `
+STYLE: Real photograph taken with a professional DSLR or medium format camera. 
+This is NOT an illustration, NOT a 3D render, NOT a cartoon, NOT digital art.
+This is a real studio photograph — photorealistic, tangible, physical, 8K resolution.
+Shot on Phase One IQ4, Hasselblad H6D or Canon EOS R5. Looks like a real product in a real studio.
 
-Hyperrealistic commercial photography. Photorealistic, 8K resolution, ultra-sharp details, zero CGI feel.
+SUBJECT: ${idea} — this is the ONLY product or service in the image. Do NOT generate anything unrelated.
 
-LIGHTING SETUP: Three-point professional studio lighting — dramatic rim highlights from upper-left, fill light from right, hair light from behind. Deep dark background (rich black or midnight navy). The subject elevated on invisible surface with perfect specular reflections underneath.
+LIGHTING: Three-point professional studio lighting. Dramatic rim highlight from upper-left, fill light from right. Deep dark background (rich black or midnight navy). Subject elevated with perfect specular reflections underneath. Smoke or steam if relevant.
 
-SCENE: The ${idea} product or service visual sits center-frame, dramatically lit, every surface texture visible. Shallow depth of field blurs background into smooth bokeh. Smoke or steam rising naturally if relevant to ${idea}.
+SCENE: The ${idea} product or service is the absolute HERO — large, centered, dramatically lit. Every surface texture perfectly visible. Shallow depth of field creates smooth dark bokeh background. Dynamic diagonal composition with powerful energy.
 
-TEXT OVERLAY ELEMENTS (rendered as physical light projections on the scene):
-- Upper portion: the text "${headline}" projected as crisp white light-painted typography on the dark background — slightly glowing at edges, uppercase, heavy weight.
-- Top-right corner: a small frosted glass square with the text "TU LOGO AQUÍ" etched in white — looks like a premium frosted label.
-- Lower-center: the text "${subheadline}" as soft white light-painted text on the dark background, medium weight, clean modern typeface.
-- Bottom: the text "${cta}" inside a physical glowing pill-shaped neon tube — warm red or amber neon with realistic glow and tube shadows.
+CTA OVERLAY — floating above the scene, not printed on any product:
+- Display the text "${cta}" as a floating text element above the photographic scene
+- Style: bold bright typography floating in the lower portion of the image, with a strong drop shadow separating it from the background
+- It must look like a post-production text layer added on top of the photo, NOT part of the physical scene
+- Creative freedom on exact position, rotation, size and font weight — but clearly readable and visually separate from the products
+- Text in ${langName}, spelled PERFECTLY, no typos
 
-CRITICAL RULES:
-- Fill the ENTIRE canvas. No blank or gray areas anywhere.
-- The subject is EXCLUSIVELY: ${idea} — nothing else.
-- Do NOT print the words "TOP SECTION", "MIDDLE SECTION", "BOTTOM SECTION", "headline", "subheadline".
-- This must look like a real professional studio photograph.
-
+NO other text anywhere. No headlines, no subheadlines, no logos, no watermarks, no product labels with text.
+Fill the ENTIRE canvas. Professional advertising agency quality.
 FORMAT: ${format.ratio} — ${format.label} ${format.sublabel}
-  `.trim(),
+    `.trim(),
   },
 
   lifestyle_clean: {
-  name: 'Lifestyle Clean',
-  prompt: (idea, headline, subheadline, cta, format, langName) => `
-SUBJECT — THE ONLY PRODUCT OR SERVICE IN THIS IMAGE: ${idea}
-DO NOT generate cameras, generic products, skincare items, or any object unrelated to: ${idea}
-
+    name: 'Lifestyle Clean',
+    prompt: (idea, cta, format, langName) => `
 Hyperrealistic lifestyle commercial photography. Editorial magazine quality, authentic candid feel, 8K resolution.
 
-LIGHTING SETUP: Natural golden hour sunlight from the left, warm soft shadows, white bounce card on the right. Completely natural and unposed feel.
+SUBJECT: ${idea} — this is the ONLY product or service in the image. Do NOT generate anything unrelated.
 
-SCENE: Real people authentically using or enjoying ${idea} in a warm real-world environment — a sunlit space relevant to ${idea}. Candid expressions, natural body language. Background blurred into creamy bokeh. Warm color grade: lifted shadows, golden highlights.
+LIGHTING: Natural golden hour sunlight from left, warm soft shadows. Completely natural and unposed feel.
 
-TEXT OVERLAY ELEMENTS (integrated naturally into the photograph):
-- Upper portion: the text "${headline}" on a frosted semi-transparent film strip — physical acetate with clean white typography, soft drop shadow.
-- Top-right corner: a small frosted glass square with the text "TU LOGO AQUÍ" — like a physical sticker on frosted glass.
-- Mid-lower area: the text "${subheadline}" on a thin semi-transparent warm dark bar — like a lower-third on a high-end TV commercial.
-- Bottom: the text "${cta}" inside a physical coral or warm terracotta pill — like a real painted wooden sign with text screenprinted in white.
+SCENE: A real person using the ${idea} product — but the PRODUCT is the clear visual hero, not the person. The product must be large, sharp, and prominently featured in the foreground. The woman's hands and hair are visible but slightly secondary — they provide context and lifestyle feel without overshadowing the product. The product is in sharp focus, the person and background are softly blurred into warm bokeh. Think of how GHD or Dyson shoots their lifestyle ads — the tool is always the star, the person provides the aspirational context. Warm golden hour light, authentic candid feel, but the product dominates the frame.
 
-CRITICAL RULES:
-- Fill the ENTIRE canvas. No blank or gray areas anywhere.
-- The subject is EXCLUSIVELY: ${idea} — nothing else.
-- Do NOT print the words "TOP SECTION", "MIDDLE SECTION", "BOTTOM SECTION", "headline", "subheadline".
-- This must look like a real lifestyle brand campaign photograph.
+CTA OVERLAY — floating above the scene, not printed on any surface:
+- Display the text "${cta}" as a floating text element above the photographic scene
+- Style: warm friendly typography floating naturally over the image, with a soft semi-transparent pill background or subtle shadow
+- It must look like a post-production text layer added on top of the photo, NOT part of the physical scene
+- Creative freedom on exact position and font style — warm, approachable, editorial feel
+- Text in ${langName}, spelled PERFECTLY, no typos
 
+NO other text anywhere. No headlines, no subheadlines, no logos, no watermarks.
+Fill the ENTIRE canvas. Real lifestyle brand campaign quality.
 FORMAT: ${format.ratio} — ${format.label} ${format.sublabel}
-  `.trim(),
+    `.trim(),
   },
 
   minimalist_studio: {
-  name: 'Minimalist Studio',
-  prompt: (idea, headline, subheadline, cta, format, langName) => `
-SUBJECT — THE ONLY PRODUCT OR SERVICE IN THIS IMAGE: ${idea}
-DO NOT generate cameras, generic products, skincare items, or any object unrelated to: ${idea}
-
+    name: 'Minimalist Studio',
+    prompt: (idea, cta, format, langName) => `
 Hyperrealistic minimalist commercial still life photography. Luxury product catalog quality, clinical sharpness, 8K resolution.
 
-LIGHTING SETUP: Single large softbox directly overhead, soft even illumination, zero harsh shadows. Pure white seamless paper background. The subject casts a single perfect soft shadow at its base — the only shadow in frame.
+SUBJECT: ${idea} — this is the ONLY product or service in the image. Do NOT generate anything unrelated.
 
-SCENE: The ${idea} product sits on a flawless white surface, perfectly centered. Every material detail rendered with photographic precision — textures, labels, finishes, edges. Generous empty white space surrounds the subject. Clinical, precise, premium.
+LIGHTING: Single large softbox directly overhead, soft even illumination, zero harsh shadows. Pure white or very light gray seamless background. Single perfect soft shadow at base.
 
-TEXT OVERLAY ELEMENTS (printed directly on the white surface — visible paper texture under the ink):
-- Upper area: the text "${headline}" printed in dark charcoal thin-weight typography — ink sits slightly on paper surface, micro-texture visible.
-- Top-right corner: a small thin-bordered square with the text "TU LOGO AQUÍ" in minimal gray letters — like a real placeholder printed on a product sheet.
-- Below the subject: the text "${subheadline}" printed in medium gray, same paper-ink texture, elegant tracking.
-- Bottom: the text "${cta}" inside a minimal dark-outlined pill shape drawn on the paper — like a designer's annotation on a real product sheet.
+SCENE: The ${idea} sits perfectly centered on a flawless surface. Every material detail rendered with photographic precision. Generous white space. Clinical, precise, premium. Ultra-luxury brand catalog aesthetic.
 
-CRITICAL RULES:
-- Fill the ENTIRE canvas. No blank or gray areas anywhere.
-- The subject is EXCLUSIVELY: ${idea} — nothing else.
-- Do NOT print the words "TOP SECTION", "MIDDLE SECTION", "BOTTOM SECTION", "headline", "subheadline".
-- This must look like a real luxury brand product catalog photograph.
+CTA OVERLAY — floating above the scene, not printed on any surface:
+- Display the text "${cta}" as a floating text element above the photographic scene
+- Style: thin elegant typography floating in the lower area, with generous space around it
+- It must look like a post-production text layer added on top of the photo, NOT part of the physical scene
+- Creative freedom on exact position — minimal, sophisticated, premium feel
+- Text in ${langName}, spelled PERFECTLY, no typos
 
+NO other text anywhere. No headlines, no subheadlines, no logos, no watermarks.
+Fill the ENTIRE canvas. Luxury brand catalog quality.
 FORMAT: ${format.ratio} — ${format.label} ${format.sublabel}
-  `.trim(),
+    `.trim(),
   },
 
   gradient_vivid: {
-  name: 'Gradient Vivid',
-  prompt: (idea, headline, subheadline, cta, format, langName) => `
-SUBJECT — THE ONLY PRODUCT OR SERVICE IN THIS IMAGE: ${idea}
-DO NOT generate cameras, generic products, skincare items, or any object unrelated to: ${idea}
-
+    name: 'Gradient Vivid',
+    prompt: (idea, cta, format, langName) => `
 Hyperrealistic digital-physical hybrid commercial photography. Mixed studio and colored LED panel lighting, 8K resolution.
 
-LIGHTING SETUP: Multiple colored LED panels lighting the background wall — creating real physical color gradients (vivid purple-to-pink or cyan-to-blue). These are real lights in a real studio. The colored light wraps around the subject creating natural color bleeding on its surfaces.
+SUBJECT: ${idea} — this is the ONLY product or service in the image. Do NOT generate anything unrelated.
 
-SCENE: The ${idea} product or service visual is the centerpiece, surrounded by real physical abstract elements — colored acrylic shapes, glass prisms, geometric mirrors — all catching and refracting the colored LED light. The background wall is bathed in vivid gradient from practical lights.
+LIGHTING: Multiple colored LED panels creating real physical color gradients (vivid purple-to-pink or cyan-to-blue or orange-to-yellow). Real lights in a real studio. Colored light wraps around the subject with natural color bleeding on surfaces.
 
-TEXT OVERLAY ELEMENTS (physical signs placed in the studio during the shoot):
-- Upper area: the text "${headline}" displayed on a physical LED matrix panel in the background — real LEDs, visible pixel grid at edges, white bright light, slightly overexposed.
-- Top-right corner: a small backlit acrylic square with the text "TU LOGO AQUÍ" — glowing from within like a real lightbox sign.
-- Below the subject: the text "${subheadline}" on a thinner physical LED strip panel — same real LED aesthetic, slightly dimmer.
-- Bottom: the text "${cta}" on a physical neon-style LED flex tube bent into a pill shape — real neon-adjacent glow, visible tube mounting hardware at ends.
+SCENE: The ${idea} is the centerpiece surrounded by real physical abstract elements — colored acrylic shapes, glass prisms, geometric mirrors catching and refracting colored LED light. Background wall bathed in vivid gradient from practical lights. Trendy, energetic, contemporary.
 
-CRITICAL RULES:
-- Fill the ENTIRE canvas. No blank or gray areas anywhere.
-- The subject is EXCLUSIVELY: ${idea} — nothing else.
-- Do NOT print the words "TOP SECTION", "MIDDLE SECTION", "BOTTOM SECTION", "headline", "subheadline".
-- This must look like a real studio photograph with practical lighting effects.
+CTA OVERLAY — floating above the scene, not printed on any object:
+- Display the text "${cta}" as a floating text element above the photographic scene
+- Style: bold vivid typography floating dynamically over the image, with neon glow or bright color treatment
+- It must look like a post-production text layer added on top of the photo, NOT part of the physical scene
+- Creative freedom on position and angle — energetic, modern, eye-catching
+- Text in ${langName}, spelled PERFECTLY, no typos
 
+NO other text anywhere. No headlines, no subheadlines, no logos, no watermarks.
+Fill the ENTIRE canvas. Real studio photography with practical lighting effects.
 FORMAT: ${format.ratio} — ${format.label} ${format.sublabel}
-  `.trim(),
+    `.trim(),
   },
 
   cinematic_dark: {
-  name: 'Cinematic Dark',
-  prompt: (idea, headline, subheadline, cta, format, langName) => `
-SUBJECT — THE ONLY PRODUCT OR SERVICE IN THIS IMAGE: ${idea}
-DO NOT generate cameras, generic products, skincare items, or any object unrelated to: ${idea}
-
+    name: 'Cinematic Dark',
+    prompt: (idea, cta, format, langName) => `
 Hyperrealistic cinematic luxury commercial photography. Single dramatic key light, cinema camera quality, 8K resolution.
 
-LIGHTING SETUP: Single hard key light from upper-left at 45 degrees — deep dramatic shadows across 60% of frame. Subject catches brilliant specular highlight against surrounding darkness. Subtle backlight rim-lights the subject from behind. Real atmospheric haze or smoke fills the air catching light rays.
+SUBJECT: ${idea} — this is the ONLY product or service in the image. Do NOT generate anything unrelated.
 
-SCENE: The ${idea} product or service visual emerges from deep darkness, dramatically lit. Background is almost entirely black with subtle texture — weathered dark wood, aged black marble, or brushed dark metal relevant to ${idea}. Real atmospheric smoke or mist drifts through the air catching the key light. Gold and copper reflections catch on surfaces.
+LIGHTING: Single hard key light from upper-left at 45 degrees. Deep dramatic shadows across 60% of frame. Subject catches brilliant specular highlight. Subtle backlight rim from behind. Real atmospheric haze or smoke in the air catching light rays.
 
-TEXT OVERLAY ELEMENTS (physical gold-leaf printed elements placed in the scene):
-- Upper area: the text "${headline}" as physical gold-leaf letterpress typography — gold catches the key light unevenly, some letters brighter than others, tactile and real.
-- Top-right corner: a small dark rectangle with gold-leaf border containing the text "TU LOGO AQUÍ" in small gold letterpress text — like a real luxury brand stamp.
-- Below the subject: the text "${subheadline}" in thin gold or silver letterpress text — same physical gold-leaf quality, elegant and restrained.
-- Bottom: the text "${cta}" engraved into a small dark metal pill-shaped badge with gold text — like a real premium product badge.
+SCENE: The ${idea} emerges from deep darkness, dramatically lit. Background almost entirely black with subtle texture — dark wood, aged marble, or brushed dark metal. Real atmospheric smoke drifts through air. Gold and copper reflections on surfaces. Ultra-premium, cinematic luxury.
 
-CRITICAL RULES:
-- Fill the ENTIRE canvas. No blank or gray areas anywhere.
-- The subject is EXCLUSIVELY: ${idea} — nothing else.
-- Do NOT print the words "TOP SECTION", "MIDDLE SECTION", "BOTTOM SECTION", "headline", "subheadline".
-- This must look like a real frame from a luxury cinema commercial.
+CTA OVERLAY — floating above the scene, not printed on any surface:
+- Display the text "${cta}" as a floating text element above the photographic scene
+- Style: elegant gold or white typography floating dramatically over the dark scene, with subtle glow
+- It must look like a post-production text layer added on top of the photo, NOT part of the physical scene
+- Creative freedom on position — cinematic, luxury, dramatic feel
+- Text in ${langName}, spelled PERFECTLY, no typos
 
+NO other text anywhere. No headlines, no subheadlines, no logos, no watermarks.
+Fill the ENTIRE canvas. Real luxury cinema commercial frame quality.
 FORMAT: ${format.ratio} — ${format.label} ${format.sublabel}
-  `.trim(),
+    `.trim(),
   },
 }
 
 const STRATEGY_COPY = {
+  // Venta agresiva
   impact: (idea, format, langName) => `
 Eres experto en copywriting publicitario para Meta Ads en México.
 NEGOCIO: ${idea}
@@ -163,28 +146,30 @@ suplemento, antes y después corporal. Solo vende el SERVICIO y la EXPERIENCIA.
 Formato del anuncio: ${format.ratio} (${format.label} ${format.sublabel})
 Responde SOLO este JSON sin texto extra:
 {
-  "headline": "TITULAR EN MAYÚSCULAS con urgencia real y escasez, máximo 6 palabras, usa emojis ⏰🔥⚡",
-  "subheadline": "Hook urgente con escasez en menos de 10 palabras",
-  "body": "Copy con urgencia real, 120-180 caracteres, 2-3 emojis (⏰🔥⚡), hook urgente + escasez + beneficio",
-  "cta": "CTA con tiempo o escasez, máximo 4 palabras"
+  "headline": "TITULAR agresivo de alta energía, máximo 6 palabras, 2-3 emojis estratégicos 💥👊🔥",
+  "subheadline": "Frase de impacto directo que golpea al cliente, máximo 10 palabras",
+  "body": "Copy de venta agresiva, 180-250 caracteres, 4-6 emojis 💥👊🔥⚡, hook poderoso + beneficio contundente + precio o valor + CTA directo",
+  "cta": "CTA directo y poderoso, máximo 4 palabras"
 }`.trim(),
 
+  // Neutro/Profesional
   solution: (idea, format, langName) => `
 Eres experto en copywriting publicitario para Meta Ads en México.
 NEGOCIO: ${idea}
-Genera copy publicitario en ${langName} con ESTRATEGIA NEUTRA, PROFESIONAL Y CLARA.
+Genera copy publicitario en ${langName} con ESTRATEGIA NEUTRA Y PROFESIONAL.
 IMPORTANTE: NO uses palabras prohibidas: adelgaza, cura, trata, baja de peso,
 transforma tu cuerpo, gana dinero, ingreso pasivo, resultados garantizados de salud,
 suplemento, antes y después corporal. Solo vende el SERVICIO y la EXPERIENCIA.
 Formato del anuncio: ${format.ratio} (${format.label} ${format.sublabel})
 Responde SOLO este JSON sin texto extra:
 {
-  "headline": "Titular profesional y claro que identifica el problema o beneficio, máximo 6 palabras, 0-1 emojis sutiles",
-  "subheadline": "Beneficio + servicio en menos de 10 palabras, tono neutro y confiable",
-  "body": "Copy profesional y claro, 80-120 caracteres, 0-2 emojis sutiles, beneficio + servicio + CTA suave",
+  "headline": "Titular profesional y claro, máximo 6 palabras, 0-1 emojis sutiles",
+  "subheadline": "Beneficio principal del servicio, tono confiable, máximo 10 palabras",
+  "body": "Copy neutro y profesional, 80-120 caracteres, 0-2 emojis sutiles, beneficio + propuesta de valor + CTA suave",
   "cta": "CTA suave y profesional, máximo 4 palabras"
 }`.trim(),
 
+  // Sentido de urgencia
   emotion: (idea, format, langName) => `
 Eres experto en copywriting publicitario para Meta Ads en México.
 NEGOCIO: ${idea}
@@ -195,26 +180,17 @@ suplemento, antes y después corporal. Solo vende el SERVICIO y la EXPERIENCIA.
 Formato del anuncio: ${format.ratio} (${format.label} ${format.sublabel})
 Responde SOLO este JSON sin texto extra:
 {
-  "headline": "TITULAR alta energía emojizado y emocional, máximo 6 palabras, 2-3 emojis estratégicos",
-  "subheadline": "Frase impactante que conecta emocionalmente, máximo 10 palabras",
-  "body": "Copy alta energía, 180-250 caracteres, 4-6 emojis estratégicos, hook emojizado + frase impactante + slogan + CTA directo",
-  "cta": "CTA directo y poderoso, máximo 4 palabras"
+  "headline": "TITULAR con MÁXIMA urgencia y FOMO, máximo 6 palabras, emojis 🚨⏰🔥",
+  "subheadline": "Consecuencia de NO actuar ahora, máximo 10 palabras",
+  "body": "Copy de urgencia extrema, 150-200 caracteres, 3-4 emojis 🚨⏰🔥💥, deadline real + escasez + consecuencia + CTA inmediato",
+  "cta": "CTA de acción inmediata, máximo 4 palabras"
 }`.trim(),
 }
 
 function buildImagePrompt(idea, headline, cta, subheadline, visualStyleId, langId, strategyId, format) {
   const vs   = VISUAL_STYLE_CONFIG[visualStyleId] || VISUAL_STYLE_CONFIG.bold_product
   const lang = LANGUAGE_CONFIG[langId]            || LANGUAGE_CONFIG.es
-
-  const placeholders = {
-    es: { headline: "TU TITULAR AQUÍ", subheadline: "TU COPY AQUÍ", cta: "TU CTA AQUÍ" },
-    en: { headline: "YOUR HEADLINE HERE", subheadline: "YOUR SUBHEADLINE HERE", cta: "YOUR CTA HERE" },
-    pt: { headline: "SEU TÍTULO AQUI", subheadline: "SEU SUBTÍTULO AQUI", cta: "SEU CTA AQUI" },
-  }
-
-  const ph = placeholders[langId] || placeholders.es
-
-  return vs.prompt(idea, ph.headline, ph.subheadline, ph.cta, format, lang.name)
+  return vs.prompt(idea, cta, format, lang.name)
 }
 
 async function generateAd(idea, format, logo, strategyId = 'impact', langId = 'es', visualStyleId = 'bold_product') {
@@ -299,9 +275,9 @@ async function generateVideoScript(idea, copy, strategyId, langId, audioType, cu
   const lang  = LANGUAGE_CONFIG[langId] || LANGUAGE_CONFIG.es
 
   const strategyTone = {
-    impact:   'urgente y poderoso, con energía alta y llamadas a la acción inmediatas',
-    solution: 'profesional y confiable, presentando el problema y la solución claramente',
-    emotion:  'cálido y emotivo, conectando con las aspiraciones y sentimientos del cliente',
+    impact:   'agresivo y de alta energía, venta directa y poderosa',
+    solution: 'profesional y confiable, claro y neutro',
+    emotion:  'urgente con FOMO extremo, sensación de escasez y deadline',
   }
 
   const hasCustomScript = customScript && customScript.trim().length > 0
