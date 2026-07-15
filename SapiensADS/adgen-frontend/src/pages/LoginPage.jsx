@@ -120,10 +120,16 @@ export default function LoginPage() {
           </form>
 
           <p className="text-center text-xs text-gray-600">
-            ¿No tienes acceso?{' '}
+            ¿No tienes cuenta?{' '}
+            <Link to="/register" className="text-purple-400 hover:text-purple-300 transition">
+              Regístrate gratis
+            </Link>
+          </p>
+          <p className="text-center text-xs text-gray-600">
+            ¿Quieres más créditos?{' '}
             <a href="https://hotmart.com/tu-producto" target="_blank" rel="noreferrer"
                className="text-purple-400 hover:text-purple-300 transition">
-              Compra tu plan aquí
+              Compra un plan
             </a>
           </p>
 

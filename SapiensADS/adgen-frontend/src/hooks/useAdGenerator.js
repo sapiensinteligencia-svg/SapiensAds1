@@ -6,8 +6,6 @@ import { LANGUAGES } from '../components/LanguageSelector'
 import { VISUAL_STYLES } from '../components/VisualStyleSelector'
 import { parseApiError } from '../utils/errorHandler'
 
-const FREE_LIMIT = 3
-
 export function useAdGenerator() {
   const [idea, setIdea]               = useState('')
   const [language, setLanguage]       = useState(LANGUAGES[0])
@@ -20,7 +18,7 @@ export function useAdGenerator() {
   const [history, setHistory]         = useState([])
   const [loading, setLoading]         = useState(false)
   const [error, setError]             = useState(null)
-  const [credits, setCredits]         = useState(FREE_LIMIT)
+  const [credits, setCredits]         = useState(null)
   const [user, setUser]               = useState(null)
   const [showPricing, setShowPricing] = useState(false)
   const [pricingReason, setPricingReason] = useState('manual')
@@ -44,7 +42,11 @@ export function useAdGenerator() {
   }
 
   const generate = useCallback(async (currentIdea, currentLanguage, currentVisualStyle, currentImage) => {
-    if (credits <= 0) { openPricing('limit'); return }
+    if (!localStorage.getItem('sapiensads_token')) {
+      window.location.href = '/register'
+      return
+    }
+    if (credits !== null && credits <= 0) { openPricing('limit'); return }
     setLoading(true)
     setError(null)
     try {

@@ -4,6 +4,7 @@ import { BrowserRouter, Routes, Route } from 'react-router-dom'
 import './index.css'
 import App              from './App.jsx'
 import LoginPage        from './pages/LoginPage.jsx'
+import RegisterPage     from './pages/RegisterPage.jsx'
 import AuthCallbackPage from './pages/AuthCallbackPage.jsx'
 import SplashScreen     from './components/SplashScreen.jsx'
 
@@ -17,6 +18,7 @@ function Root() {
         <Routes>
           <Route path="/"              element={<App />} />
           <Route path="/login"         element={<LoginPage />} />
+          <Route path="/register"      element={<RegisterPage />} />
           <Route path="/auth/callback" element={<AuthCallbackPage />} />
         </Routes>
       </BrowserRouter>

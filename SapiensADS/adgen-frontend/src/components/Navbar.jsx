@@ -1,4 +1,5 @@
 export default function Navbar({ credits, onOpenPricing }) {
+  const isLoggedIn = !!localStorage.getItem('sapiensads_token')
   const user = JSON.parse(localStorage.getItem('sapiensads_user') || '{}')
 
   const creditsColor = credits <= 0
@@ -43,39 +44,55 @@ export default function Navbar({ credits, onOpenPricing }) {
         {/* Acciones */}
         <div className="flex items-center gap-3">
 
-          {/* Créditos */}
-          <button
-            onClick={() => onOpenPricing('manual')}
-            className={`hidden sm:flex items-center gap-1.5 text-xs px-3 py-1.5
-                        rounded-full border transition hover:opacity-80 ${creditsColor}`}>
-            <svg width="12" height="12" viewBox="0 0 24 24" fill="none"
-                 stroke="currentColor" strokeWidth="2" strokeLinecap="round">
-              <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/>
-            </svg>
-            {credits} {credits === 1 ? 'generación' : 'generaciones'}
-          </button>
+          {isLoggedIn ? (
+            <>
+              {/* Créditos */}
+              <button
+                onClick={() => onOpenPricing('manual')}
+                className={`hidden sm:flex items-center gap-1.5 text-xs px-3 py-1.5
+                            rounded-full border transition hover:opacity-80 ${creditsColor}`}>
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none"
+                     stroke="currentColor" strokeWidth="2" strokeLinecap="round">
+                  <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/>
+                </svg>
+                {credits} {credits === 1 ? 'generación' : 'generaciones'}
+              </button>
 
-          {/* Ver planes */}
-          <button
-            onClick={() => onOpenPricing('manual')}
-            className="text-xs px-3 py-1.5 rounded-full border border-purple-500/40
-                       text-purple-300 bg-purple-500/10 hover:bg-purple-500/20 transition">
-            Ver planes
-          </button>
+              {/* Ver planes */}
+              <button
+                onClick={() => onOpenPricing('manual')}
+                className="text-xs px-3 py-1.5 rounded-full border border-purple-500/40
+                           text-purple-300 bg-purple-500/10 hover:bg-purple-500/20 transition">
+                Ver planes
+              </button>
 
-          {/* Usuario */}
-          {user?.name && (
-            <span className="hidden sm:block text-xs text-gray-500">
-              {user.name}
-            </span>
+              {/* Usuario */}
+              {user?.name && (
+                <span className="hidden sm:block text-xs text-gray-500">
+                  {user.name}
+                </span>
+              )}
+
+              {/* Logout */}
+              <button
+                onClick={handleLogout}
+                className="text-xs text-gray-600 hover:text-gray-400 transition px-2 py-1.5">
+                Salir
+              </button>
+            </>
+          ) : (
+            <>
+              <a href="/login"
+                 className="text-xs px-3 py-1.5 rounded-full text-gray-400 hover:text-gray-200 transition">
+                Iniciar sesión
+              </a>
+              <a href="/register"
+                 className="text-xs px-3 py-1.5 rounded-full border border-purple-500/40
+                            text-purple-300 bg-purple-500/10 hover:bg-purple-500/20 transition">
+                Crear cuenta gratis
+              </a>
+            </>
           )}
-
-          {/* Logout */}
-          <button
-            onClick={handleLogout}
-            className="text-xs text-gray-600 hover:text-gray-400 transition px-2 py-1.5">
-            Salir
-          </button>
 
         </div>
       </div>

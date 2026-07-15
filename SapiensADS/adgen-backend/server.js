@@ -18,7 +18,6 @@ app.use(express.urlencoded({ limit: '50mb', extended: true }))
 
 app.use('/api', generateRoute)
 app.use('/api/auth', authRoute)
-app.use('/api/auth', require('./routes/auth'))
 app.use('/api/hotmart', hotmartRoute)
 
 app.get('/health', (req, res) => res.json({ status: 'ok' }))

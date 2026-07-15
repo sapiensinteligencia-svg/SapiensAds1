@@ -3,15 +3,14 @@ import { Link } from 'react-router-dom'
 import { useAuth } from '../hooks/useAuth'
 
 export default function RegisterPage() {
-  const [name, setName]         = useState('')
-  const [email, setEmail]       = useState('')
-  const [password, setPassword] = useState('')
-  const [sent, setSent]         = useState(false)
+  const [name, setName]   = useState('')
+  const [email, setEmail] = useState('')
+  const [sent, setSent]   = useState(false)
   const { handleRegister, loading, error } = useAuth()
 
   const handleSubmit = async (e) => {
     e.preventDefault()
-    const result = await handleRegister({ name, email, password })
+    const result = await handleRegister({ name, email })
     if (result.success) setSent(true)
   }
 
@@ -30,7 +29,7 @@ export default function RegisterPage() {
           <div>
             <h1 className="text-2xl font-medium text-white mb-2">Revisa tu correo</h1>
             <p className="text-gray-500 text-sm leading-relaxed">
-              Enviamos un enlace de verificación a<br/>
+              Enviamos un enlace de acceso a<br/>
               <span className="text-purple-300">{email}</span>
             </p>
           </div>
@@ -94,20 +93,9 @@ export default function RegisterPage() {
                            focus:border-purple-500 transition" />
             </div>
 
-            <div className="space-y-1.5">
-              <label className="block text-xs text-gray-400 uppercase tracking-widest font-medium">
-                Contraseña
-              </label>
-              <input type="password" value={password} onChange={e => setPassword(e.target.value)}
-                placeholder="Mínimo 8 caracteres" minLength={8} required
-                className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3
-                           text-white placeholder-gray-600 text-sm focus:outline-none
-                           focus:border-purple-500 transition" />
-            </div>
-
             {error && <p className="text-sm text-red-400 text-center animate-fadeIn">{error}</p>}
 
-            <button type="submit" disabled={loading || !name || !email || !password}
+            <button type="submit" disabled={loading || !name || !email}
               className="w-full py-3.5 rounded-xl font-medium text-white text-sm transition
                          bg-purple-600 hover:bg-purple-700 disabled:opacity-40
                          disabled:cursor-not-allowed mt-2">

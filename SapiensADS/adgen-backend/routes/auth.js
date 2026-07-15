@@ -2,7 +2,45 @@ const express = require('express')
 const router  = express.Router()
 const jwt     = require('jsonwebtoken')
 const User    = require('../models/User')
-const { sendMagicLinkEmail } = require('../services/emailService')
+const { sendMagicLinkEmail, sendWelcomeEmail } = require('../services/emailService')
+
+const FREE_PLAN_CREDITS = 3
+
+router.post('/register', async (req, res) => {
+  const { name, email } = req.body
+  if (!name || !email)
+    return res.status(400).json({ error: 'Nombre y correo son requeridos' })
+
+  try {
+    const existing = await User.findOne({ email })
+    if (existing)
+      return res.status(409).json({ error: 'Ya existe una cuenta con este correo. Inicia sesión.' })
+
+    const user = new User({
+      name,
+      email,
+      plan:     'free',
+      credits:  FREE_PLAN_CREDITS,
+      isActive: true,
+      source:   'manual',
+    })
+
+    const token = user.generateMagicToken()
+    await user.save()
+
+    try {
+      await sendWelcomeEmail({ name, email })
+      await sendMagicLinkEmail({ name, email, token })
+    } catch (emailErr) {
+      console.error('Cuenta creada pero falló el envío de email:', emailErr)
+    }
+
+    res.status(201).json({ message: 'Cuenta creada. Revisa tu correo para acceder.' })
+  } catch (err) {
+    console.error('Error en registro gratuito:', err)
+    res.status(500).json({ error: 'Error al crear la cuenta' })
+  }
+})
 
 router.post('/magic-link', async (req, res) => {
   console.log('Magic link solicitado para:', req.body.email)

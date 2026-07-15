@@ -2,9 +2,9 @@ const { Resend } = require('resend')
 const resend = new Resend(process.env.RESEND_API_KEY)
 
 async function sendMagicLinkEmail({ name, email, token }) {
-  const url = `${process.env.APP_URL}/auth/verify?token=${token}`
+  const url = `${process.env.API_URL}/api/auth/verify?token=${token}`
 
-  await resend.emails.send({
+  const { error } = await resend.emails.send({
     from:    'SapiensADS AI <onboarding@resend.dev>',
     to:      email,
     subject: 'Tu enlace de acceso — SapiensADS AI',
@@ -41,10 +41,12 @@ async function sendMagicLinkEmail({ name, email, token }) {
       </div>
     `
   })
+
+  if (error) throw new Error(`Resend rechazó el envío: ${error.message}`)
 }
 
 async function sendWelcomeEmail({ name, email }) {
-  await resend.emails.send({
+  const { error } = await resend.emails.send({
     from:    'SapiensADS AI <onboarding@resend.dev>',
     to:      email,
     subject: '¡Bienvenido a SapiensADS AI!',
@@ -78,6 +80,8 @@ async function sendWelcomeEmail({ name, email }) {
       </div>
     `
   })
+
+  if (error) throw new Error(`Resend rechazó el envío: ${error.message}`)
 }
 
 module.exports = { sendMagicLinkEmail, sendWelcomeEmail }
