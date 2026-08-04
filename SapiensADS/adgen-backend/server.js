@@ -13,12 +13,16 @@ const PORT = process.env.PORT || 3001
 connectDB()
 
 app.use(cors({ origin: process.env.APP_URL || 'http://localhost:5173' }))
+
+// El webhook necesita el body crudo para validar la firma,
+// por eso se monta antes de express.json()
+app.use('/api/hotmart', hotmartRoute)
+
 app.use(express.json({ limit: '50mb' }))
 app.use(express.urlencoded({ limit: '50mb', extended: true }))
 
 app.use('/api', generateRoute)
 app.use('/api/auth', authRoute)
-app.use('/api/hotmart', hotmartRoute)
 
 app.get('/health', (req, res) => res.json({ status: 'ok' }))
 

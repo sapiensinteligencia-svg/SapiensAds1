@@ -18,7 +18,17 @@ function getPlanFromHotmart(data) {
 
 function validateHotmartWebhook(req) {
   const hotmartToken = process.env.HOTMART_WEBHOOK_TOKEN
-  if (!hotmartToken) return true
+
+  if (!hotmartToken) {
+    // Sin token no hay forma de verificar el origen: en producción se rechaza
+    if (process.env.NODE_ENV === 'production') {
+      console.error('HOTMART_WEBHOOK_TOKEN no está configurado, webhook rechazado')
+      return false
+    }
+    console.warn('HOTMART_WEBHOOK_TOKEN no configurado, validación omitida (solo desarrollo)')
+    return true
+  }
+
   const signature = req.headers['x-hotmart-hottok']
   return signature === hotmartToken
 }
@@ -27,12 +37,17 @@ router.post('/webhook', express.raw({ type: 'application/json' }), async (req, r
   if (!validateHotmartWebhook(req))
     return res.status(401).json({ error: 'Webhook no autorizado' })
 
+  // Con express.raw el body llega como Buffer, pero se acepta un objeto ya
+  // parseado por si algún middleware lo consume antes
   let event
   try {
-    event = JSON.parse(req.body)
+    event = Buffer.isBuffer(req.body) ? JSON.parse(req.body.toString('utf8')) : req.body
   } catch {
     return res.status(400).json({ error: 'Body inválido' })
   }
+
+  if (!event || typeof event !== 'object')
+    return res.status(400).json({ error: 'Body inválido' })
 
   const { event: eventType, data } = event
   const email = data?.buyer?.email
