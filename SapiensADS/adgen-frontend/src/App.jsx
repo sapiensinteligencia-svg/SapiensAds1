@@ -14,6 +14,11 @@ import PricingModal        from './components/PricingModal'
 import Toast               from './components/Toast'
 import PageTransition      from './components/PageTransition'
 
+import anunciosGeneradosIcon   from './assets/anuncios_generados.png'
+import estrategiasVentaIcon    from './assets/estrategias_de_venta.png'
+import estilosVisualesIcon     from './assets/estilos_visuales.png'
+import spotsPublicitariosIcon  from './assets/spots_publicitarios.png'
+
 const FLOATING_ICONS = [
   { icon: '📣', label: 'megaphone', x: '8%',  y: '15%', delay: '0s',   duration: '12s', size: 'text-2xl' },
   { icon: '📊', label: 'chart',     x: '88%', y: '20%', delay: '2s',   duration: '14s', size: 'text-xl'  },
@@ -30,10 +35,10 @@ const FLOATING_ICONS = [
 ]
 
 const METRICS = [
-  { value: 10000, suffix: '+', label: 'Anuncios generados',   icon: '🖼️' },
-  { value: 3,     suffix: '',  label: 'Estrategias de venta', icon: '🧠' },
-  { value: 5,     suffix: '',  label: 'Estilos visuales',     icon: '🎨' },
-  { value: 8,     suffix: 's', label: 'Spots publicitarios',  icon: '🎬' },
+  { value: 10000, suffix: '+', label: 'Anuncios generados',   icon: anunciosGeneradosIcon  },
+  { value: 3,     suffix: '',  label: 'Estrategias de venta', icon: estrategiasVentaIcon   },
+  { value: 5,     suffix: '',  label: 'Estilos visuales',     icon: estilosVisualesIcon    },
+  { value: 8,     suffix: 's', label: 'Spots publicitarios',  icon: spotsPublicitariosIcon },
 ]
 
 function AnimatedCounter({ target, suffix, duration = 1500 }) {
@@ -102,7 +107,13 @@ function MetricsRow() {
           className="rounded-2xl border border-white/8 bg-white/3 backdrop-blur-sm
                      p-3 text-center space-y-1 hover:border-purple-500/20
                      hover:bg-purple-500/5 transition-all duration-300">
-          <div className="text-xl">{metric.icon}</div>
+          {/* mx-auto porque el preflight de Tailwind pone display:block en img,
+              y entonces el text-center del contenedor ya no la centra */}
+          <img
+            src={metric.icon}
+            alt=""
+            className="w-8 h-8 object-contain mx-auto"
+          />
           <div className="text-lg font-bold text-white">
             <AnimatedCounter target={metric.value} suffix={metric.suffix} />
           </div>
