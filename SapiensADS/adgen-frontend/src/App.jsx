@@ -277,6 +277,7 @@ export default function App() {
         open={showPricing}
         onClose={() => setShowPricing(false)}
         reason={pricingReason}
+        user={user}
       />
 
       {toast && (

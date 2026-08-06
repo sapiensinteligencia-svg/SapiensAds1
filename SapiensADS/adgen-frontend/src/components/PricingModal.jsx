@@ -1,4 +1,29 @@
-import { createPortal } from 'react-dom'
+import { useState } from 'react'
+
+// Las URLs se leen de forma estática: Vite solo sustituye import.meta.env.VITE_X
+// cuando la clave es literal, un acceso dinámico quedaría undefined en el build
+const CHECKOUT_URLS = {
+  pro:      import.meta.env.VITE_HOTMART_PRO_URL,
+  business: import.meta.env.VITE_HOTMART_BUSINESS_URL,
+}
+
+// El webhook de Hotmart identifica al comprador por su email, así que se
+// precarga el de la cuenta para que el pago actualice al usuario correcto
+// en lugar de crear uno nuevo
+function buildCheckoutUrl(planId, user) {
+  const base = CHECKOUT_URLS[planId]
+  if (!base) return null
+
+  try {
+    const url = new URL(base)
+    if (user?.email) url.searchParams.set('email', user.email)
+    if (user?.name)  url.searchParams.set('name',  user.name)
+    return url.toString()
+  } catch {
+    console.error(`URL de checkout inválida para el plan "${planId}":`, base)
+    return null
+  }
+}
 
 const PLANS = [
   {
@@ -14,8 +39,7 @@ const PLANS = [
       'Copy con IA',
       'Banner con diseño básico',
     ],
-    cta: 'Tu plan actual',
-    disabled: true,
+    cta: 'Plan gratuito',
     highlighted: false,
   },
   {
@@ -33,7 +57,6 @@ const PLANS = [
       'Descarga en alta resolución',
     ],
     cta: 'Comenzar Pro',
-    disabled: false,
     highlighted: true,
   },
   {
@@ -52,13 +75,32 @@ const PLANS = [
       'Historial completo',
     ],
     cta: 'Comenzar Business',
-    disabled: false,
     highlighted: false,
   },
 ]
 
-export default function PricingModal({ open, onClose, reason }) {
+export default function PricingModal({ open, onClose, reason, user }) {
+  const [checkoutError, setCheckoutError] = useState(null)
+
   if (!open) return null
+
+  const currentPlan = user?.plan || 'free'
+
+  const handleCheckout = plan => {
+    const url = buildCheckoutUrl(plan.id, user)
+
+    if (!url) {
+      console.error(
+        `Checkout no configurado para "${plan.id}". ` +
+        `Define VITE_HOTMART_${plan.id.toUpperCase()}_URL en el entorno del frontend.`
+      )
+      setCheckoutError('No pudimos abrir el checkout. Escríbenos y te ayudamos a completar la compra.')
+      return
+    }
+
+    setCheckoutError(null)
+    window.open(url, '_blank', 'noopener,noreferrer')
+  }
 
   return (
     <div
@@ -111,7 +153,11 @@ export default function PricingModal({ open, onClose, reason }) {
 
         {/* Plans */}
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 p-6">
-          {PLANS.map(plan => (
+          {PLANS.map(plan => {
+            const isCurrent     = plan.id === currentPlan
+            const isPurchasable = plan.id !== 'free' && !isCurrent
+
+            return (
             <div
               key={plan.id}
               className={`relative rounded-xl border p-5 flex flex-col gap-4 transition
@@ -160,22 +206,27 @@ export default function PricingModal({ open, onClose, reason }) {
               </ul>
 
               <button
-                disabled={plan.disabled}
+                disabled={!isPurchasable}
+                onClick={() => handleCheckout(plan)}
                 className={`w-full py-2.5 rounded-xl text-sm font-medium transition
-                  ${plan.disabled
+                  ${!isPurchasable
                     ? 'border border-white/10 text-gray-600 cursor-default'
                     : plan.highlighted
                       ? 'bg-purple-600 hover:bg-purple-700 text-white'
                       : 'border border-white/15 text-gray-300 hover:bg-white/5'
                   }`}
               >
-                {plan.cta}
+                {isCurrent ? 'Tu plan actual' : plan.cta}
               </button>
             </div>
-          ))}
+            )
+          })}
         </div>
 
         <div className="px-6 pb-6 text-center">
+          {checkoutError && (
+            <p className="text-xs text-red-400 mb-2">{checkoutError}</p>
+          )}
           <p className="text-xs text-gray-600">
             Todos los planes incluyen acceso inmediato · Sin tarjeta para el plan Free
           </p>
