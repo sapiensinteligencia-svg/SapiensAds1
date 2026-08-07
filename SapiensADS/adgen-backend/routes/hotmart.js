@@ -16,17 +16,15 @@ function getPlanFromHotmart(data) {
   return 'pro'
 }
 
+// Sin token no hay forma de verificar el origen, así que se rechaza siempre.
+// No se consulta NODE_ENV a propósito: hacer depender la seguridad de que esa
+// variable esté bien puesta significa quedar abierto cuando se olvida.
 function validateHotmartWebhook(req) {
   const hotmartToken = process.env.HOTMART_WEBHOOK_TOKEN
 
   if (!hotmartToken) {
-    // Sin token no hay forma de verificar el origen: en producción se rechaza
-    if (process.env.NODE_ENV === 'production') {
-      console.error('HOTMART_WEBHOOK_TOKEN no está configurado, webhook rechazado')
-      return false
-    }
-    console.warn('HOTMART_WEBHOOK_TOKEN no configurado, validación omitida (solo desarrollo)')
-    return true
+    console.error('HOTMART_WEBHOOK_TOKEN no está configurado, webhook rechazado')
+    return false
   }
 
   const signature = req.headers['x-hotmart-hottok']

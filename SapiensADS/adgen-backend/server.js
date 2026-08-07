@@ -2,6 +2,36 @@ const express   = require('express')
 const cors      = require('cors')
 require('dotenv').config()
 
+// Se valida antes de cargar rutas y de abrir el puerto: es preferible que el
+// despliegue falle al arrancar, con el motivo en los logs, a que quede en pie
+// a medias y el fallo aparezca cuando un usuario intente pagar o entrar
+const REQUIRED_ENV = [
+  'MONGODB_URI',
+  'JWT_SECRET',
+  'GEMINI_API_KEY',
+  'FAL_KEY',
+  'RESEND_API_KEY',
+  'APP_URL',
+  'API_URL',
+  'HOTMART_WEBHOOK_TOKEN',
+]
+
+const missing = REQUIRED_ENV.filter(key => !process.env[key])
+
+if (missing.length) {
+  console.error('\nFaltan variables de entorno obligatorias:')
+  missing.forEach(key => console.error(`  - ${key}`))
+  console.error('\nEl servidor no puede arrancar sin ellas.\n')
+  process.exit(1)
+}
+
+if (process.env.NODE_ENV !== 'production') {
+  console.warn(
+    `\n  NODE_ENV = "${process.env.NODE_ENV || 'sin definir'}" (no es "production").\n` +
+    '  Si esto es un despliegue real, definela: hay comportamiento de desarrollo activo.\n'
+  )
+}
+
 const connectDB      = require('./config/db')
 const generateRoute  = require('./routes/generate')
 const authRoute      = require('./routes/auth')

@@ -101,8 +101,23 @@ router.get('/verify', async (req, res) => {
   }
 })
 
+// Este endpoint entrega una sesión válida con solo conocer un email, así que
+// exige activación explícita. Antes bastaba con que NODE_ENV no valiera
+// 'production' para dejarlo abierto: olvidar esa variable al desplegar
+// convertía el backdoor en público. Ahora falta la variable y no existe.
+const DEV_LOGIN_ENABLED =
+  process.env.ENABLE_DEV_LOGIN === 'true' && process.env.NODE_ENV !== 'production'
+
+if (DEV_LOGIN_ENABLED) {
+  console.warn(
+    '\n  ATENCION: /api/auth/dev-login esta ACTIVO.\n' +
+    '  Permite iniciar sesion como cualquier usuario con solo su email.\n' +
+    '  No despliegues con ENABLE_DEV_LOGIN=true.\n'
+  )
+}
+
 router.post('/dev-login', async (req, res) => {
-  if (process.env.NODE_ENV === 'production')
+  if (!DEV_LOGIN_ENABLED)
     return res.status(404).json({ error: 'Not found' })
 
   const { email } = req.body
