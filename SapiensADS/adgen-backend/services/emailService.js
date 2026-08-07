@@ -1,11 +1,24 @@
 const { Resend } = require('resend')
 const resend = new Resend(process.env.RESEND_API_KEY)
 
+// onboarding@resend.dev es el remitente compartido de pruebas de Resend: solo
+// entrega a la direccion dueña de la cuenta, cualquier otro destinatario da 403.
+// Para enviar a clientes hay que verificar un dominio propio en resend.com/domains
+// y poner aqui una direccion de ese dominio.
+const FROM = process.env.EMAIL_FROM || 'SapiensADS AI <onboarding@resend.dev>'
+
+if (!process.env.EMAIL_FROM) {
+  console.warn(
+    '\n  EMAIL_FROM no esta definida: se usara onboarding@resend.dev.\n' +
+    '  Solo llegaran correos a la cuenta dueña de Resend; el resto fallara con 403.\n'
+  )
+}
+
 async function sendMagicLinkEmail({ name, email, token }) {
   const url = `${process.env.API_URL}/api/auth/verify?token=${token}`
 
   const { error } = await resend.emails.send({
-    from:    'SapiensADS AI <onboarding@resend.dev>',
+    from:    FROM,
     to:      email,
     subject: 'Tu enlace de acceso — SapiensADS AI',
     html: `
@@ -37,7 +50,7 @@ async function sendMagicLinkEmail({ name, email, token }) {
         </p>
 
         <hr style="border: none; border-top: 1px solid #ffffff15; margin: 24px 0;">
-        <p style="color: #4b5563; font-size: 12px;">SapiensADS AI · Powered by OpenAI & Ideogram</p>
+        <p style="color: #4b5563; font-size: 12px;">SapiensADS AI · Powered by Gemini & Nano Banana 2</p>
       </div>
     `
   })
@@ -47,7 +60,7 @@ async function sendMagicLinkEmail({ name, email, token }) {
 
 async function sendWelcomeEmail({ name, email }) {
   const { error } = await resend.emails.send({
-    from:    'SapiensADS AI <onboarding@resend.dev>',
+    from:    FROM,
     to:      email,
     subject: '¡Bienvenido a SapiensADS AI!',
     html: `
@@ -76,7 +89,7 @@ async function sendWelcomeEmail({ name, email }) {
         </a>
 
         <hr style="border: none; border-top: 1px solid #ffffff15; margin: 24px 0;">
-        <p style="color: #4b5563; font-size: 12px;">SapiensADS AI · Powered by OpenAI & Ideogram</p>
+        <p style="color: #4b5563; font-size: 12px;">SapiensADS AI · Powered by Gemini & Nano Banana 2</p>
       </div>
     `
   })
