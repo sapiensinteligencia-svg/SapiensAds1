@@ -60,6 +60,7 @@ router.post('/webhook', express.raw({ type: 'application/json' }), async (req, r
       const credits = PLAN_CREDITS[plan]
 
       let user = await User.findOne({ email })
+      const isNewUser = !user
 
       if (user) {
         user.plan     = plan
@@ -78,10 +79,20 @@ router.post('/webhook', express.raw({ type: 'application/json' }), async (req, r
           hotmartSubscriptionId: subscriptionId,
           creditsResetAt: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000),
         })
-        await sendWelcomeEmail({ name, email })
       }
 
+      // Guardar primero: el pago ya se cobró, así que la cuenta debe quedar
+      // activa aunque el correo falle. Y el fallo se aísla aquí para no
+      // devolver 500, porque Hotmart reintentaría un pago ya procesado.
       await user.save()
+
+      if (isNewUser) {
+        try {
+          await sendWelcomeEmail({ name, email })
+        } catch (err) {
+          console.error('Cuenta activada pero fallo el email de bienvenida a', email, '-', err.message)
+        }
+      }
     }
 
     if (eventType === 'PURCHASE_CANCELED'      ||
