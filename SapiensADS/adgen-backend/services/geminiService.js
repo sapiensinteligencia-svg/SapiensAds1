@@ -24,15 +24,16 @@ LIGHTING: Three-point professional studio lighting. Dramatic rim highlight from 
 
 SCENE: The ${idea} product or service is the absolute HERO — large, centered, dramatically lit. Every surface texture perfectly visible. Shallow depth of field creates smooth dark bokeh background. Dynamic diagonal composition with powerful energy.
 
-CTA OVERLAY — floating above the scene, not printed on any product:
-- Display the text "${cta}" as a floating text element above the photographic scene
+TEXT OVERLAY — a graphic layer composited on top of the photograph, not printed on any product:
+- Render the words "${cta}" as floating display typography over the photographic scene
 - Style: bold bright typography floating in the lower portion of the image, with a strong drop shadow separating it from the background
 - It must look like a post-production text layer added on top of the photo, NOT part of the physical scene
 - Creative freedom on exact position, rotation, size and font weight — but clearly readable and visually separate from the products
 - Text in ${langName}, spelled PERFECTLY, no typos
 
 NO other text anywhere. No headlines, no subheadlines, no logos, no watermarks, no product labels with text.
-Fill the ENTIRE canvas. Professional advertising agency quality.
+The photograph must fill the ENTIRE canvas edge to edge: no borders, no margins, no separate strip or band for the text. The text sits ON TOP of the photograph.
+Professional advertising agency quality.
 FORMAT: ${format.ratio} — ${format.label} ${format.sublabel}
     `.trim(),
   },
@@ -46,17 +47,18 @@ SUBJECT: ${idea} — this is the ONLY product or service in the image. Do NOT ge
 
 LIGHTING: Natural golden hour sunlight from left, warm soft shadows. Completely natural and unposed feel.
 
-SCENE: A real person using the ${idea} product — but the PRODUCT is the clear visual hero, not the person. The product must be large, sharp, and prominently featured in the foreground. The woman's hands and hair are visible but slightly secondary — they provide context and lifestyle feel without overshadowing the product. The product is in sharp focus, the person and background are softly blurred into warm bokeh. Think of how GHD or Dyson shoots their lifestyle ads — the tool is always the star, the person provides the aspirational context. Warm golden hour light, authentic candid feel, but the product dominates the frame.
+SCENE: A person using the ${idea} — but the PRODUCT is the clear visual hero, not the person. The product must be large, sharp and prominently featured in the foreground. The person appears only as context: hands, forearms or a partial silhouette, never a full face or posed portrait. Choose the person's age, gender and styling to match who genuinely uses ${idea}. The product is in sharp focus; the person and the background fall into soft warm bokeh. Warm golden hour light, authentic candid feel, but the product dominates the frame.
 
-CTA OVERLAY — floating above the scene, not printed on any surface:
-- Display the text "${cta}" as a floating text element above the photographic scene
-- Style: warm friendly typography floating naturally over the image, with a soft semi-transparent pill background or subtle shadow
+TEXT OVERLAY — a graphic layer composited on top of the photograph, not printed on any surface:
+- Render the words "${cta}" as floating display typography over the photographic scene
+- Style: warm friendly lettering sitting naturally over the image, with a soft semi-transparent pill background or subtle shadow
 - It must look like a post-production text layer added on top of the photo, NOT part of the physical scene
 - Creative freedom on exact position and font style — warm, approachable, editorial feel
 - Text in ${langName}, spelled PERFECTLY, no typos
 
 NO other text anywhere. No headlines, no subheadlines, no logos, no watermarks.
-Fill the ENTIRE canvas. Real lifestyle brand campaign quality.
+The photograph must fill the ENTIRE canvas edge to edge: no borders, no margins, no separate strip or band for the text. The text sits ON TOP of the photograph.
+Real lifestyle brand campaign quality.
 FORMAT: ${format.ratio} — ${format.label} ${format.sublabel}
     `.trim(),
   },
@@ -72,15 +74,16 @@ LIGHTING: Single large softbox directly overhead, soft even illumination, zero h
 
 SCENE: The ${idea} sits perfectly centered on a flawless surface. Every material detail rendered with photographic precision. Generous white space. Clinical, precise, premium. Ultra-luxury brand catalog aesthetic.
 
-CTA OVERLAY — floating above the scene, not printed on any surface:
-- Display the text "${cta}" as a floating text element above the photographic scene
+TEXT OVERLAY — a graphic layer composited on top of the photograph, not printed on any surface:
+- Render the words "${cta}" as floating display typography over the photographic scene
 - Style: thin elegant typography floating in the lower area, with generous space around it
 - It must look like a post-production text layer added on top of the photo, NOT part of the physical scene
 - Creative freedom on exact position — minimal, sophisticated, premium feel
 - Text in ${langName}, spelled PERFECTLY, no typos
 
 NO other text anywhere. No headlines, no subheadlines, no logos, no watermarks.
-Fill the ENTIRE canvas. Luxury brand catalog quality.
+The photograph must fill the ENTIRE canvas edge to edge: no borders, no margins, no separate strip or band for the text. The text sits ON TOP of the photograph.
+Luxury brand catalog quality.
 FORMAT: ${format.ratio} — ${format.label} ${format.sublabel}
     `.trim(),
   },
@@ -96,15 +99,16 @@ LIGHTING: Multiple colored LED panels creating real physical color gradients (vi
 
 SCENE: The ${idea} is the centerpiece surrounded by real physical abstract elements — colored acrylic shapes, glass prisms, geometric mirrors catching and refracting colored LED light. Background wall bathed in vivid gradient from practical lights. Trendy, energetic, contemporary.
 
-CTA OVERLAY — floating above the scene, not printed on any object:
-- Display the text "${cta}" as a floating text element above the photographic scene
+TEXT OVERLAY — a graphic layer composited on top of the photograph, not printed on any object:
+- Render the words "${cta}" as floating display typography over the photographic scene
 - Style: bold vivid typography floating dynamically over the image, with neon glow or bright color treatment
 - It must look like a post-production text layer added on top of the photo, NOT part of the physical scene
 - Creative freedom on position and angle — energetic, modern, eye-catching
 - Text in ${langName}, spelled PERFECTLY, no typos
 
 NO other text anywhere. No headlines, no subheadlines, no logos, no watermarks.
-Fill the ENTIRE canvas. Real studio photography with practical lighting effects.
+The photograph must fill the ENTIRE canvas edge to edge: no borders, no margins, no separate strip or band for the text. The text sits ON TOP of the photograph.
+Real studio photography with practical lighting effects.
 FORMAT: ${format.ratio} — ${format.label} ${format.sublabel}
     `.trim(),
   },
@@ -120,15 +124,16 @@ LIGHTING: Single hard key light from upper-left at 45 degrees. Deep dramatic sha
 
 SCENE: The ${idea} emerges from deep darkness, dramatically lit. Background almost entirely black with subtle texture — dark wood, aged marble, or brushed dark metal. Real atmospheric smoke drifts through air. Gold and copper reflections on surfaces. Ultra-premium, cinematic luxury.
 
-CTA OVERLAY — floating above the scene, not printed on any surface:
-- Display the text "${cta}" as a floating text element above the photographic scene
+TEXT OVERLAY — a graphic layer composited on top of the photograph, not printed on any surface:
+- Render the words "${cta}" as floating display typography over the photographic scene
 - Style: elegant gold or white typography floating dramatically over the dark scene, with subtle glow
 - It must look like a post-production text layer added on top of the photo, NOT part of the physical scene
 - Creative freedom on position — cinematic, luxury, dramatic feel
 - Text in ${langName}, spelled PERFECTLY, no typos
 
 NO other text anywhere. No headlines, no subheadlines, no logos, no watermarks.
-Fill the ENTIRE canvas. Real luxury cinema commercial frame quality.
+The photograph must fill the ENTIRE canvas edge to edge: no borders, no margins, no separate strip or band for the text. The text sits ON TOP of the photograph.
+Real luxury cinema commercial frame quality.
 FORMAT: ${format.ratio} — ${format.label} ${format.sublabel}
     `.trim(),
   },
@@ -260,7 +265,22 @@ async function generateAdVariations(idea, logo, langId = 'es', visualStyleId = '
       logo,
     }).then(imageUrl => ({ ...copy, imageUrl }))
   )
-  const allVariations = await Promise.all(imagePromises)
+  // allSettled y no all: con 9 imagenes en paralelo, una sola negativa del
+  // modelo tiraba las otras ocho y el usuario perdia el credito sin recibir
+  // nada. Mejor entregar las que salieron y registrar las que no.
+  const resultados   = await Promise.allSettled(imagePromises)
+  const allVariations = resultados
+    .filter(r => r.status === 'fulfilled')
+    .map(r => r.value)
+
+  const fallidas = resultados.filter(r => r.status === 'rejected')
+  if (fallidas.length) {
+    console.warn(`${fallidas.length} de ${resultados.length} variaciones fallaron:`)
+    fallidas.forEach(r => console.warn('  -', r.reason?.message))
+  }
+
+  if (!allVariations.length)
+    throw new Error(`Ninguna de las ${resultados.length} variaciones se generó. Motivo: ${fallidas[0]?.reason?.message}`)
 
   const grouped = {}
   strategies.forEach(strategyId => {

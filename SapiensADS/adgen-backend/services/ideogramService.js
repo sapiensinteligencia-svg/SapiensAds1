@@ -2,6 +2,8 @@ const { GoogleGenerativeAI } = require('@google/generative-ai')
 
 const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY)
 
+const MAX_INTENTOS = 3
+
 async function generateAdImage({ imagePrompt, format, logo }) {
   console.log('=== NANO BANANA 2 ===')
   console.log('Prompt:', imagePrompt.substring(0, 100))
@@ -34,25 +36,43 @@ async function generateAdImage({ imagePrompt, format, logo }) {
     parts.push({ text: imagePrompt })
   }
 
-  const response = await model.generateContent({
-    contents: [{ role: 'user', parts }],
-    generationConfig: {
-      responseModalities: ['image', 'text'],
-      imageConfig: { aspectRatio }
+  // El modelo se niega de forma intermitente a rotular el CTA sobre la imagen y
+  // responde con texto explicando por que. Con el mismo prompt suele funcionar
+  // al reintentar, asi que se insiste antes de darlo por fallido.
+  let ultimaRespuesta = null
+
+  for (let intento = 1; intento <= MAX_INTENTOS; intento++) {
+    const response = await model.generateContent({
+      contents: [{ role: 'user', parts }],
+      generationConfig: {
+        responseModalities: ['image', 'text'],
+        imageConfig: { aspectRatio }
+      }
+    })
+
+    const candidates = response.response.candidates
+
+    if (!candidates || candidates.length === 0) {
+      ultimaRespuesta = 'la API no devolvió candidatos'
+      console.warn(`Intento ${intento}/${MAX_INTENTOS}: sin candidatos`)
+      continue
     }
-  })
 
-  const candidates = response.response.candidates
-  if (!candidates || candidates.length === 0)
-    throw new Error('Nano Banana 2 no retornó candidatos')
+    const responseParts = candidates[0].content.parts || []
+    const imagePart     = responseParts.find(p => p.inlineData)
 
-  const responseParts = candidates[0].content.parts
-  const imagePart = responseParts.find(p => p.inlineData)
+    if (imagePart)
+      return `data:${imagePart.inlineData.mimeType};base64,${imagePart.inlineData.data}`
 
-  if (!imagePart)
-    throw new Error('Nano Banana 2 no generó imagen')
+    // Sin imagen: el motivo viene en la parte de texto, hay que conservarlo
+    ultimaRespuesta = responseParts.find(p => p.text)?.text?.trim() || `finishReason: ${candidates[0].finishReason}`
+    console.warn(`Intento ${intento}/${MAX_INTENTOS}: respondió texto en vez de imagen — ${ultimaRespuesta.slice(0, 150)}`)
+  }
 
-  return `data:${imagePart.inlineData.mimeType};base64,${imagePart.inlineData.data}`
+  throw new Error(
+    `Nano Banana 2 no generó imagen tras ${MAX_INTENTOS} intentos. ` +
+    `Última respuesta del modelo: ${ultimaRespuesta}`
+  )
 }
 
 module.exports = { generateAdImage }
