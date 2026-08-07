@@ -48,6 +48,13 @@ const previewClass = currentFormat.id === 'instagram_story'
   ? 'aspect-video'
   : 'aspect-square'
 
+// El spot se genera en 9:16 solo para story; el resto sale en 16:9
+// (videoService.js). Si el contenedor heredara el aspecto del banner, un
+// video 16:9 dentro de una caja cuadrada quedaria recortado.
+const videoClass = currentFormat.id === 'instagram_story'
+  ? 'aspect-[9/16]'
+  : 'aspect-video'
+
   const handleDownload = async () => {
     const url      = activeTab === 'video' ? videoUrl : current.imageUrl
     const filename = activeTab === 'video' ? 'spot-sapiensads.mp4' : 'banner-sapiensads.png'
@@ -179,7 +186,8 @@ const previewClass = currentFormat.id === 'instagram_story'
       )}
 
       <div
-        className={`w-full ${previewClass} rounded-2xl overflow-hidden relative border border-purple-500/20`}
+        className={`w-full ${activeTab === 'video' ? videoClass : previewClass}
+                    rounded-2xl overflow-hidden relative border border-purple-500/20`}
         style={{
           boxShadow: '0 8px 40px rgba(124, 58, 237, 0.25), 0 2px 8px rgba(0,0,0,0.4)',
           animation: 'scaleIn 0.5s cubic-bezier(0.34, 1.56, 0.64, 1) forwards',
@@ -198,8 +206,18 @@ const previewClass = currentFormat.id === 'instagram_story'
             </div>
           )
         ) : (
+          // object-contain y no cover: cover recorta el video, y esa regla
+          // sigue aplicandose en pantalla completa, donde deja el encuadre
+          // ampliado y cortado en vez de ajustarse a la pantalla
           videoUrl ? (
-            <video src={videoUrl} controls autoPlay loop className="w-full h-full object-cover" />
+            <video
+              src={videoUrl}
+              controls
+              autoPlay
+              loop
+              playsInline
+              className="w-full h-full object-contain bg-black"
+            />
           ) : null
         )}
         <div className="absolute inset-0 rounded-2xl ring-1 ring-inset ring-white/5 pointer-events-none" />
