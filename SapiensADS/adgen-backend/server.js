@@ -2,9 +2,7 @@ const express   = require('express')
 const cors      = require('cors')
 require('dotenv').config()
 
-// Se valida antes de cargar rutas y de abrir el puerto: es preferible que el
-// despliegue falle al arrancar, con el motivo en los logs, a que quede en pie
-// a medias y el fallo aparezca cuando un usuario intente pagar o entrar
+
 const REQUIRED_ENV = [
   'MONGODB_URI',
   'JWT_SECRET',
@@ -44,8 +42,7 @@ connectDB()
 
 app.use(cors({ origin: process.env.APP_URL || 'http://localhost:5173' }))
 
-// El webhook necesita el body crudo para validar la firma,
-// por eso se monta antes de express.json()
+
 app.use('/api/hotmart', hotmartRoute)
 
 app.use(express.json({ limit: '50mb' }))

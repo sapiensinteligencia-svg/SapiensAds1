@@ -48,9 +48,7 @@ const previewClass = currentFormat.id === 'instagram_story'
   ? 'aspect-video'
   : 'aspect-square'
 
-// El spot se genera en 9:16 solo para story; el resto sale en 16:9
-// (videoService.js). Si el contenedor heredara el aspecto del banner, un
-// video 16:9 dentro de una caja cuadrada quedaria recortado.
+
 const videoClass = currentFormat.id === 'instagram_story'
   ? 'aspect-[9/16]'
   : 'aspect-video'
@@ -206,9 +204,7 @@ const videoClass = currentFormat.id === 'instagram_story'
             </div>
           )
         ) : (
-          // object-contain y no cover: cover recorta el video, y esa regla
-          // sigue aplicandose en pantalla completa, donde deja el encuadre
-          // ampliado y cortado en vez de ajustarse a la pantalla
+
           videoUrl ? (
             <video
               src={videoUrl}

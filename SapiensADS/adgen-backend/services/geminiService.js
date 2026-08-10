@@ -265,9 +265,7 @@ async function generateAdVariations(idea, logo, langId = 'es', visualStyleId = '
       logo,
     }).then(imageUrl => ({ ...copy, imageUrl }))
   )
-  // allSettled y no all: con 9 imagenes en paralelo, una sola negativa del
-  // modelo tiraba las otras ocho y el usuario perdia el credito sin recibir
-  // nada. Mejor entregar las que salieron y registrar las que no.
+  
   const resultados   = await Promise.allSettled(imagePromises)
   const allVariations = resultados
     .filter(r => r.status === 'fulfilled')

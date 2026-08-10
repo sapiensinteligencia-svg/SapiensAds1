@@ -1,10 +1,7 @@
 const { Resend } = require('resend')
 const resend = new Resend(process.env.RESEND_API_KEY)
 
-// onboarding@resend.dev es el remitente compartido de pruebas de Resend: solo
-// entrega a la direccion dueña de la cuenta, cualquier otro destinatario da 403.
-// Para enviar a clientes hay que verificar un dominio propio en resend.com/domains
-// y poner aqui una direccion de ese dominio.
+
 const FROM = process.env.EMAIL_FROM || 'SapiensADS AI <onboarding@resend.dev>'
 
 if (!process.env.EMAIL_FROM) {

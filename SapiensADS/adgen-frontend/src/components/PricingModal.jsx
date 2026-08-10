@@ -1,15 +1,12 @@
 import { useState } from 'react'
 
-// Las URLs se leen de forma estática: Vite solo sustituye import.meta.env.VITE_X
-// cuando la clave es literal, un acceso dinámico quedaría undefined en el build
+
 const CHECKOUT_URLS = {
   pro:      import.meta.env.VITE_HOTMART_PRO_URL,
   business: import.meta.env.VITE_HOTMART_BUSINESS_URL,
 }
 
-// El webhook de Hotmart identifica al comprador por su email, así que se
-// precarga el de la cuenta para que el pago actualice al usuario correcto
-// en lugar de crear uno nuevo
+
 function buildCheckoutUrl(planId, user) {
   const base = CHECKOUT_URLS[planId]
   if (!base) return null

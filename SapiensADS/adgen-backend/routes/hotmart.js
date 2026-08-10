@@ -16,9 +16,7 @@ function getPlanFromHotmart(data) {
   return 'pro'
 }
 
-// Sin token no hay forma de verificar el origen, así que se rechaza siempre.
-// No se consulta NODE_ENV a propósito: hacer depender la seguridad de que esa
-// variable esté bien puesta significa quedar abierto cuando se olvida.
+
 function validateHotmartWebhook(req) {
   const hotmartToken = process.env.HOTMART_WEBHOOK_TOKEN
 
@@ -35,8 +33,7 @@ router.post('/webhook', express.raw({ type: 'application/json' }), async (req, r
   if (!validateHotmartWebhook(req))
     return res.status(401).json({ error: 'Webhook no autorizado' })
 
-  // Con express.raw el body llega como Buffer, pero se acepta un objeto ya
-  // parseado por si algún middleware lo consume antes
+
   let event
   try {
     event = Buffer.isBuffer(req.body) ? JSON.parse(req.body.toString('utf8')) : req.body
@@ -81,9 +78,7 @@ router.post('/webhook', express.raw({ type: 'application/json' }), async (req, r
         })
       }
 
-      // Guardar primero: el pago ya se cobró, así que la cuenta debe quedar
-      // activa aunque el correo falle. Y el fallo se aísla aquí para no
-      // devolver 500, porque Hotmart reintentaría un pago ya procesado.
+
       await user.save()
 
       if (isNewUser) {

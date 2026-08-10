@@ -36,9 +36,7 @@ async function generateAdImage({ imagePrompt, format, logo }) {
     parts.push({ text: imagePrompt })
   }
 
-  // El modelo se niega de forma intermitente a rotular el CTA sobre la imagen y
-  // responde con texto explicando por que. Con el mismo prompt suele funcionar
-  // al reintentar, asi que se insiste antes de darlo por fallido.
+
   let ultimaRespuesta = null
 
   for (let intento = 1; intento <= MAX_INTENTOS; intento++) {
@@ -64,7 +62,6 @@ async function generateAdImage({ imagePrompt, format, logo }) {
     if (imagePart)
       return `data:${imagePart.inlineData.mimeType};base64,${imagePart.inlineData.data}`
 
-    // Sin imagen: el motivo viene en la parte de texto, hay que conservarlo
     ultimaRespuesta = responseParts.find(p => p.text)?.text?.trim() || `finishReason: ${candidates[0].finishReason}`
     console.warn(`Intento ${intento}/${MAX_INTENTOS}: respondió texto en vez de imagen — ${ultimaRespuesta.slice(0, 150)}`)
   }

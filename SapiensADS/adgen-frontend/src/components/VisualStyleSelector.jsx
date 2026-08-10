@@ -1,5 +1,4 @@
-// Los nombres de archivo deben coincidir exactamente, incluidas mayúsculas:
-// el build de Vercel corre sobre Linux, que sí distingue mayúsculas
+
 import boldProductIcon from '../assets/bold_product.png'
 import lifestyleIcon   from '../assets/Lifestyle.png'
 import minimalistaIcon from '../assets/minimalista.png'

@@ -101,10 +101,7 @@ router.get('/verify', async (req, res) => {
   }
 })
 
-// Este endpoint entrega una sesión válida con solo conocer un email, así que
-// exige activación explícita. Antes bastaba con que NODE_ENV no valiera
-// 'production' para dejarlo abierto: olvidar esa variable al desplegar
-// convertía el backdoor en público. Ahora falta la variable y no existe.
+
 const DEV_LOGIN_ENABLED =
   process.env.ENABLE_DEV_LOGIN === 'true' && process.env.NODE_ENV !== 'production'
 
